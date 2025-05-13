@@ -44,7 +44,7 @@ if api_key and topic:
     format_instructions = parser.get_format_instructions()
 
     prompt = PromptTemplate(
-        template="Brainstorm a series of 3-5 questions under who, what, when, where, why about the topic and return the result in JSON format.\n{format_instructions}\n\Topic: {topic}",
+        template="Brainstorm a series of 3-5 questions under who, what, when, where, why about the topic and return the result in JSON format.\n{format_instructions}\nTopic: {topic}",
         input_variables=["topic"],
         partial_variables={"format_instructions": format_instructions}
     )
