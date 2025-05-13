@@ -1,11 +1,9 @@
 import streamlit as st
-import openai
 from langchain_openai import ChatOpenAI
 from langchain.output_parsers import PydanticOutputParser
 from langchain.prompts import PromptTemplate
 from pydantic import BaseModel, Field
 from typing import List
-import json
 
 class StarburstAnswerOutput(BaseModel):
     topic: str = Field(..., description="The original topic")

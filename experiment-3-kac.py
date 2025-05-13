@@ -1,11 +1,9 @@
 import streamlit as st
-import openai
 from langchain_openai import ChatOpenAI
 from langchain.output_parsers import PydanticOutputParser
 from langchain.prompts import PromptTemplate
-from pydantic import BaseModel, Field, field_validator
-from typing import List, Literal
-import json
+from pydantic import BaseModel, Field
+from typing import List
 import requests
 import tempfile
 import os
