@@ -112,15 +112,15 @@ if api_key and topic:
             st.markdown(f"- <span style='color:gray'><b>Evidence:</b></span> <i>{e}</i> <span style='color:gray'>|</span> <b>Score:</b> <span style='color:{'green' if score_result.score > 0 else 'red' if score_result.score < 0 else 'black'}'>{score_result.score}</span>", unsafe_allow_html=True)
 
     st.info("Step 4: Displaying the ACH matrix...")
-    # Step 4: Display the matrix
+    # Step 4: Display the matrix (hypotheses as columns, evidence as rows)
     st.subheader("📦 ACH Matrix")
-    st.write("Rows: Hypotheses, Columns: Evidence, Values: Score")
+    st.write("Rows: Evidence, Columns: Hypotheses, Values: Score")
     import pandas as pd
     matrix_data = []
-    for h in hypotheses:
-        row = [score_matrix[h].get(e, None) for e in all_evidence]
+    for e in all_evidence:
+        row = [score_matrix[h].get(e, None) for h in hypotheses]
         matrix_data.append(row)
-    df = pd.DataFrame(matrix_data, index=hypotheses, columns=all_evidence)
+    df = pd.DataFrame(matrix_data, index=all_evidence, columns=hypotheses)
     st.dataframe(df)
 
     st.info("Step 5: Calculating and highlighting top results...")
@@ -129,6 +129,11 @@ if api_key and topic:
     hypo_scores = {h: sum([s for s in score_matrix[h].values() if isinstance(s, int)]) for h in hypotheses}
     top_hypo = max(hypo_scores, key=hypo_scores.get)
     st.success(f"Highest scoring hypothesis: {top_hypo} (Total score: {hypo_scores[top_hypo]})")
+
+    # Disqualified hypotheses (negative total score)
+    disqualified = [h for h, score in hypo_scores.items() if score < 0]
+    if disqualified:
+        st.warning(f"Disqualified hypotheses (negative total score): {', '.join(disqualified)}")
 
     # Highest scoring evidence: sum of scores across all hypotheses
     evidence_scores = {e: sum([score_matrix[h].get(e, 0) for h in hypotheses if isinstance(score_matrix[h].get(e, 0), int)]) for e in all_evidence}
