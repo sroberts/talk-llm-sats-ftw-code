@@ -55,5 +55,19 @@ if api_key and topic:
 
         st.subheader("📦 Output")
         st.json(result.model_dump())
+
+        # --- Mermaid Mindmap Diagram ---
+        st.subheader("🧠 Starburst Mindmap (Mermaid)")
+        mermaid_mindmap = f"""
+mindmap
+  root(({result.topic}))
+    Who
+{''.join([f'      {who}\n' for who in result.answer_who])}    What
+{''.join([f'      {what}\n' for what in result.answer_what])}    When
+{''.join([f'      {when}\n' for when in result.answer_when])}    Where
+{''.join([f'      {where}\n' for where in result.answer_where])}    Why
+{''.join([f'      {why}\n' for why in result.answer_why])}
+"""
+        st.code(mermaid_mindmap, language="mermaid")
     except Exception as e:
         st.error(f"❌ Error: {str(e)}")
